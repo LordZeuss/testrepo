@@ -34,8 +34,8 @@ echo "This Script assumes your timezone is US/Eastern. You may need to modify."
 
 #Update the system
 
-echo "Would you like to update your system (Recommended)? (y/n)"
-
+echo "Would you like to update your system (Recommended)? (y/n/e)"
+echo "y=yes | n=no | e=exit-program'
 read yesorno
 
 if [ "$yesorno" = y ]; then
@@ -43,8 +43,11 @@ if [ "$yesorno" = y ]; then
 	echo "Update Successful."
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
 else
 	echo "Not a valid answer. Exiting..."
+	exit 1
 fi
 
 ######################################################################
@@ -65,8 +68,11 @@ if [ "$yesorno" = y ]; then
 	echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
 else
 	echo "Not a valid answer. Exiting..."
+	exit 1
 fi
 
 ######################################################################
@@ -79,10 +85,7 @@ read yesorno
 
 if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/qbittorrent
-	echo "version: "2.1"
-
-services:
-  qbittorrent:
+	echo "qbittorrent:
     container_name: qbittorrent
     image: hotio/qbittorrent
     ports:
@@ -98,8 +101,11 @@ services:
 	echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
 else
 	echo "Not a valid answer. Exiting..."
+	exit 1
 fi
 
 ######################################################################
