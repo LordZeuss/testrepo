@@ -31,7 +31,8 @@ echo " "
 
 #Update the system
 
-echo "Would you like to update your system (Recommended)? (y/n)"
+echo "Would you like to update your system (Recommended)? (y/n/e)"
+echo "y=yes | n=no | e=exit-program"
 
 read yesorno
 
@@ -40,15 +41,19 @@ if [ "$yesorno" = y ]; then
 	echo "Update Successful."
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
+	exit 1
 else
 	echo "Not a valid answer. Exiting..."
+	exit 1
 fi
 
 ######################################################################
 
 #Test if Docker is working and installed
 
-echo "Would you like to check if Docker is working(Recommended)? (y/n)"
+echo "Would you like to check if Docker is working(Recommended)? (y/n/e)"
 
 read yesorno
 
@@ -62,15 +67,19 @@ if [ "$yesorno" = y ]; then
 	echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
+	exit 1
 else
 	echo "Not a valid answer. Exiting..."
+	exit 1
 fi
 
 ######################################################################
 
 #Install Portainer
 
-echo "Would you like to install Portainer (Required if not already insalled)? (y/n)"
+echo "Would you like to install Portainer (Required if not already insalled)? (y/n/e)"
 
 read yesorno
 
@@ -92,15 +101,19 @@ echo " " >>/home/$USER/raspi-docker/docker-compose.yml #replace this location wi
 echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
+	exit 1
 else
 	echo "Not a valid answer. Exiting..."
+	exit 1
 fi
 
 ######################################################################
 
 #Install Sonarr
 
-echo "Would you like to install Sonarr? (y/n)"
+echo "Would you like to install Sonarr? (y/n/e)"
 
 read yesorno
 
@@ -123,15 +136,19 @@ echo " " >>/home/$USER/raspi-docker/docker-compose.yml #replace this location wi
 echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
+	exit 1
 else
 	echo "Not a valid answer. Exiting..."
+	exit 1
 fi
 
 ######################################################################
 
 #Install Radarr
 
-echo "Would you like to check if Docker is working(Recommended)? (y/n)"
+echo "Would you like to check if Docker is working(Recommended)? (y/n/e)"
 
 read yesorno
 
@@ -154,15 +171,19 @@ echo " " >>/home/$USER/raspi-docker/docker-compose.yml #replace this location wi
 echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
+	exit 1
 else
 	echo "Not a valid answer. Exiting..."
+	exit 1
 fi
 
 ######################################################################
 
 #Installing Jackett
 
-echo "Would you like to install Jackett (Required for Sonarr/Radarr)? (y/n)"
+echo "Would you like to install Jackett (Required for Sonarr/Radarr)? (y/n/e)"
 
 read yesorno
 
@@ -183,8 +204,12 @@ echo " " >>/home/$USER/raspi-docker/docker-compose.yml #replace this location wi
 echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
+	exit 1
 else
 	echo "Not a valid answer. Exiting..."
+	exit 1
 fi
 
 echo " "
