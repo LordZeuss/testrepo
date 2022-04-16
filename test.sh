@@ -42,6 +42,7 @@ echo "y=yes | n=no | e=exit-program"
 echo " "
  
 read -n1 yesorno
+echo " "
  
 if [ "$yesorno" = y ]; then
 	updatesys
@@ -64,7 +65,8 @@ fi
  
 echo "Would you like to check if Docker is working(Recommended)? (y/n/e)"
  
-read yesorno
+read -n1 yesorno
+echo " "
  
 if [ "$yesorno" = y ]; then
 	echo 'Checking Docker version...'
@@ -89,8 +91,8 @@ fi
 #Install Portainer
  
 echo "Would you like to install Portainer (Required if not already insalled)? (y/n/e)"
- 
-read yesorno
+echo " "
+read -n1 yesorno
  
 if [ "$yesorno" = y ]; then
 	echo "portainer:
@@ -111,9 +113,11 @@ echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
-        read -p "You have selected to change the path of the container. Would you like to coninue? (y/n) " fix
+        echo " "
+		read -n1 -p "You have selected to change the location of the docker-compose.yml file. Would you like to coninue? (y/n) " fix
+		echo " "
 		if [ "$fix" = y ]; then
-			read -p "Enter the new location: " answer
+			read -p "Enter the location of the docker-compose.yml file: " answer
 			sleep 1
 			echo "portainer:
   container_name: portainer
@@ -127,7 +131,8 @@ elif [ "$yesorno" = f ]; then
    - PUID=1000
    - PGID=150
    - TZ=US/Central
-  image: portainer/portainer" >> $answer ; }
+  image: portainer/portainer" >> $answer
+  			echo " " >> $answer
 		elif [ "$fix" = n ]; then
 			echo "Not adding Portainer to any file."
 			source arr-installer.sh
@@ -149,7 +154,7 @@ fi
 #Install Sonarr
  
 echo "Would you like to install Sonarr? (y/n/e)"
- 
+echo " "
 read yesorno
  
 if [ "$yesorno" = y ]; then
@@ -177,6 +182,38 @@ elif [ "$yesorno" = n ]; then
 elif [ "$yesorno" = e ]; then
 	echo "Goodbye!"
 	exit 1
+elif [ "$yesorno" = f ]; then
+        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+		if [ "$fix" = y ]; then
+			read -p "Enter the location of the docker-compose.yml file: " sonarranswer
+			read -p "Enter the new location for config: " config
+			read -p "Enter the new location of the downloads folder: " downloads
+			read -p "Enter the new location of where the TV Content is: " tv
+			sleep 1
+			echo "sonarr:
+  container_name: sonarr
+  restart: unless-stopped
+  ports:
+   - 8989:8989
+  volumes:
+   - $config:/config
+   - $downloads:/downloads
+   - $tv:/tv
+  environment:
+   - PUID=1000
+   - PGID=150
+   - TZ=US/Central
+  image: linuxserver/sonarr" >> $sonarranswer
+  			echo " " >> $sonarranswer
+  			
+		elif [ "$fix" = n ]; then
+			echo "Not adding Portainer to any file."
+			source arr-installer.sh
+			return
+		else
+			echo "Goodbye!"
+			exit 1
+		fi
 else
 	echo "Not a valid answer. Exiting..."
 	exit 1
@@ -212,6 +249,38 @@ echo " " >>/home/$USER/raspi-docker/docker-compose.yml #replace this location wi
 echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+		if [ "$fix" = y ]; then
+			read -p "Enter the location of the docker-compose.yml file: " radarranswer
+			read -p "Enter the new location for config: " rconfig
+			read -p "Enter the new location of where the Movie Content is: " movies
+			sleep 1
+			echo "radarr:
+    image: linuxserver/radarr:5.14
+    container_name: radarr
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=UTC
+      - UMASK=022 #optional
+    volumes:
+      - $rconfig
+      - $movies
+    ports:
+      - 7878:7878
+    restart: unless-stopped" >> $radarranswer
+  			echo " " >> $radarranswer
+  			echo "Done."
+			echo " "
+		elif [ "$fix" = n ]; then
+			echo "Not adding Portainer to any file."
+			source arr-installer.sh
+			return
+		else
+			echo "Goodbye!"
+			exit 1
+		fi
 elif [ "$yesorno" = e ]; then
 	echo "Goodbye!"
 	exit 1
@@ -246,6 +315,35 @@ echo " " >>/home/$USER/raspi-docker/docker-compose.yml #replace this location wi
 echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+		read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+		if [ "$fix" = y ]; then
+			read -p "Enter the location of the docker-compose.yml file: " jackettanswer
+			read -p "Enter the new location for config: " jackett
+			sleep 1
+			echo "jackett:
+  container_name: jackett
+  restart: unless-stopped
+  ports:
+   - 9117:9117
+  volumes:
+   - $jackett:/config
+  environment:
+   - PUID=1000
+   - PGID=150
+   - TZ=US/Central
+  image: linuxserver/jackett" >> $jackettanswer
+  			echo " " >> $jackettanswer
+  			echo "Done."
+			echo " "
+		elif [ "$fix" = n ]; then
+			echo "Not adding Portainer to any file."
+			source arr-installer.sh
+			return
+		else
+			echo "Goodbye!"
+			exit 1
+		fi
 elif [ "$yesorno" = e ]; then
 	echo "Goodbye!"
 	exit 1
@@ -287,6 +385,37 @@ echo "Find on port 3000. IP:3000"
 echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+		read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+		if [ "$fix" = y ]; then
+			read -p "Enter the location of the docker-compose.yml file: " adguardanswer
+			sleep 1
+			echo "adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 784:784/udp
+      - 853:853/tcp
+      - 3000:3000/tcp
+      - 80:80/tcp
+      - 443:443/tcp
+    volumes:
+      - ./workdir:/opt/adguardhome/work
+      - ./confdir:/opt/adguardhome/conf
+    restart: unless-stopped" >> $adguardanswer
+  			echo " " >> $adguardanswer
+  			echo "Done."
+			echo " "
+		elif [ "$fix" = n ]; then
+			echo "Not adding Portainer to any file."
+			source arr-installer.sh
+			return
+		else
+			echo "Goodbye!"
+			exit 1
+		fi
 elif [ "$yesorno" = e ]; then
 	echo "Goodbye!"
 	exit 1
@@ -327,6 +456,39 @@ echo "Don't forget to add the path to your books and or download client!"
 echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+		if [ "$fix" = y ]; then
+			read -p "Enter the location of the docker-compose.yml file: " readarranswer
+			read -p "Enter the new location for config: " rrconfig
+			read -p "Enter the new location of the downloads folder (Optional):  " rrdownloads
+			read -p "Enter the new location of where the Book files are(Optional): " books
+			sleep 1
+			echo "readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=US/Central
+    volumes:
+      - $rrconfig
+      - $rrdownloads
+      - $books
+    ports:
+      - 8787:8787
+    restart: unless-stopped" >> $readarranswer
+  			echo " " >> $readarranswer
+  			echo "Done."
+			echo " "
+		elif [ "$fix" = n ]; then
+			echo "Not adding Portainer to any file."
+			source arr-installer.sh
+			return
+		else
+			echo "Goodbye!"
+			exit 1
+		fi
 elif [ "$yesorno" = e ]; then
 	echo "Goodbye!"
 	exit 1
@@ -367,6 +529,39 @@ echo "Don't forget to add the path to your movies and tv shows!"
 echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+		if [ "$fix" = y ]; then
+			read -p "Enter the location of the docker-compose.yml file: " bazarranswer
+			read -p "Enter the new location for config: " brconfig
+			read -p "Enter the new location of the Movies Folder (Optional):  " brdownloads
+			read -p "Enter the new location of the TV Folder (Optional): " brtv
+			sleep 1
+			echo "bazarr:
+    image: lscr.io/linuxserver/bazarr
+    container_name: bazarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=US/Central
+    volumes:
+      - $brconfig
+      - $brdownloads
+      - $brtv
+    ports:
+      - 6767:6767
+    restart: unless-stopped" >> $bazarranswer
+  			echo " " >> $bazarranswer
+  			echo "Done."
+			echo " "
+		elif [ "$fix" = n ]; then
+			echo "Not adding Portainer to any file."
+			source arr-installer.sh
+			return
+		else
+			echo "Goodbye!"
+			exit 1
+		fi
 elif [ "$yesorno" = e ]; then
 	echo "Goodbye!"
 	exit 1
@@ -402,6 +597,34 @@ echo "Successfully Added"
 echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+		if [ "$fix" = y ]; then
+			read -p "Enter the location of the docker-compose.yml file: " overanswer
+			read -p "Enter the new location for config: " overconfig
+			sleep 1
+			echo "overseerr:
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=US/Central
+    ports:
+      - 5055:5055
+    volumes:
+      - $overconfig:/app/config
+    restart: unless-stopped" >> $overanswer
+  			echo " " >> $overanswer
+  			echo "Done."
+			echo " "
+		elif [ "$fix" = n ]; then
+			echo "Not adding Portainer to any file."
+			source arr-installer.sh
+			return
+		else
+			echo "Goodbye!"
+			exit 1
+		fi
 elif [ "$yesorno" = e ]; then
 	echo "Goodbye!"
 	exit 1
@@ -440,6 +663,39 @@ echo " " >>/home/$USER/raspi-docker/docker-compose.yml #replace this location wi
 echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+		if [ "$fix" = y ]; then
+			read -p "Enter the location of the docker-compose.yml file: " lidarranswer
+			read -p "Enter the new location for config: " lidarrconfig
+			read -p "Enter the new location of the Music Folder (Optional):  " lrmusic
+			read -p "Enter the new location of the Downloads Folder (Optional): " lrdownloads
+			sleep 1
+			echo "lidarr:
+    image: lscr.io/linuxserver/lidarr
+    container_name: lidarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - $lidarrconfig:/config
+      - $lrmusic:/music #optional
+      - $lrdownloads:/downloads #optional
+    ports:
+      - 8686:8686
+    restart: unless-stopped" >> $lidarranswer
+  			echo " " >> $lidarranswer
+  			echo "Done."
+			echo " "
+		elif [ "$fix" = n ]; then
+			echo "Not adding Portainer to any file."
+			source arr-installer.sh
+			return
+		else
+			echo "Goodbye!"
+			exit 1
+		fi
 elif [ "$yesorno" = e ]; then
 	echo "Goodbye!"
 	exit 1
@@ -476,6 +732,36 @@ echo "Successfully Added"
 echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+		if [ "$fix" = y ]; then
+			read -p "Enter the location of the docker-compose.yml file: " heimdallanswer
+			read -p "Enter the new location for config: " heimdallconfig
+			sleep 1
+			echo "heimdall:
+    image: lscr.io/linuxserver/heimdall
+    container_name: heimdall
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=US/Central
+    volumes:
+      - $heimdallconfig:/config
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped" >> $heimdallanswer
+  			echo " " >> $heimdallanswer
+  			echo "Done."
+			echo " "
+		elif [ "$fix" = n ]; then
+			echo "Not adding Portainer to any file."
+			source arr-installer.sh
+			return
+		else
+			echo "Goodbye!"
+			exit 1
+		fi
 elif [ "$yesorno" = e ]; then
 	echo "Goodbye!"
 	exit 1
