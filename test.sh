@@ -134,6 +134,7 @@ elif [ "$yesorno" = f ]; then
    - TZ=US/Central
   image: portainer/portainer" >> $answer
   			echo " " >> $answer
+			echo "Done."
 		elif [ "$fix" = n ]; then
 			echo "Not adding Portainer to any file."
 			source arr-installer.sh
@@ -156,7 +157,7 @@ fi
  
 echo "Would you like to install Sonarr? (y/n/f/e)"
 echo " "
-read yesorno
+read -n1 yesorno
  
 if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/downloads/tv
@@ -228,7 +229,7 @@ fi
  
 echo "Would you like to install Radarr? (y/n/f/e)"
  
-read yesorno
+read -n1 yesorno
  
 if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/radarr
@@ -270,8 +271,8 @@ elif [ "$yesorno" = f ]; then
       - TZ=UTC
       - UMASK=022 #optional
     volumes:
-      - $rconfig
-      - $movies
+      - $rconfig:/config
+      - $movies:/movies
     ports:
       - 7878:7878
     restart: unless-stopped" >> $radarranswer
@@ -300,7 +301,7 @@ fi
  
 echo "Would you like to install Jackett (Required for Sonarr/Radarr)? (y/n/f/e)"
  
-read yesorno
+read -n1 yesorno
  
 if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/jackett
@@ -365,7 +366,7 @@ fi
  
 echo "Would you like to install AdGuard (DNS Adblocker)? (y/n/f/e)"
  
-read yesorno
+read -n1 yesorno
  
 if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/adguard
@@ -438,7 +439,7 @@ fi
  
 echo "Would you like to install Readarr? (y/n/f/e)"
  
-read yesorno
+read -n1 yesorno
  
 if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/readarr
@@ -514,7 +515,7 @@ fi
  
 echo "Would you like to install Bazarr (Subtitles)? (y/n/f/e)"
  
-read yesorno
+read -n1 yesorno
  
 if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/bazarr
@@ -560,7 +561,7 @@ elif [ "$yesorno" = f ]; then
     volumes:
       - $brconfig:/config
       - $brmovies:/movies
-      - $brtv:/tb
+      - $brtv:/tv
     ports:
       - 6767:6767
     restart: unless-stopped" >> $bazarranswer
@@ -589,7 +590,7 @@ fi
  
 echo "Would you like to install Overseerr? (y/n/f/e)"
  
-read yesorno
+read -n1 yesorno
  
 if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/overseerr
@@ -654,7 +655,7 @@ fi
  
 echo "Would you like to install Lidarr (Music)? (y/n/f/e)"
  
-read yesorno
+read -n1 yesorno
  
 if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/lidarr
@@ -728,7 +729,7 @@ fi
  
 echo "Would you like to install Heimdall? (y/n/f/e)"
  
-read yesorno
+read -n1 yesorno
  
 if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/heimdall
@@ -793,11 +794,7 @@ fi
  
  
 echo " "
-echo "Installer Complete. Run qbittorrent.sh if you would like to install that as well."
-echo " "
-echo "NOTE: With the qbittorrent script, it will default to downloading in the /home/$USER/Downloads folder."
-echo "NOTE: The config files will default to /home/$USER/raspi-docker/qbittorrent unless otherwise changed in the script."
-echo "I recommend changing the locations of downloads and the config file location if yours is in an alternate location."
+echo "Installer Complete. Run torrent-clients-installer.sh if you would like to install a torrent client as well."
 echo " "
 echo "To access Portainer, go to the IP of this device in a web-browser, port 9000. Ex: 192.168.1.18:9000"
 echo "Goodbye!"
