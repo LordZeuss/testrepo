@@ -1,4 +1,4 @@
-#!/bin/bash 
+US/Central#!/bin/bash 
  
 clear
  
@@ -36,9 +36,9 @@ echo " "
  
 #Update the system
 echo " "
-echo "Would you like to update your system (Recommended)? (y/n/e)"
+echo "Would you like to update your system (Recommended)? (y/n/f/e)"
 echo " "
-echo "y=yes | n=no | e=exit-program"
+echo "y=yes | n=no | f=Change-container-volumes-&-location | e=exit-program"
 echo " "
  
 read -n1 yesorno
@@ -63,7 +63,7 @@ fi
  
 #Test if Docker is working and installed
  
-echo "Would you like to check if Docker is working(Recommended)? (y/n/e)"
+echo "Would you like to check if Docker is working(Recommended)? (y/n/f/e)"
  
 read -n1 yesorno
 echo " "
@@ -90,7 +90,7 @@ fi
  
 #Install Portainer
  
-echo "Would you like to install Portainer (Required if not already insalled)? (y/n/e)"
+echo "Would you like to install Portainer (Required if not already insalled)? (y/n/f/e)"
 echo " "
 read -n1 yesorno
  
@@ -117,7 +117,8 @@ elif [ "$yesorno" = f ]; then
 		read -n1 -p "You have selected to change the location of the docker-compose.yml file. Would you like to coninue? (y/n) " fix
 		echo " "
 		if [ "$fix" = y ]; then
-			read -p "Enter the location of the docker-compose.yml file: " answer
+      echo " "
+      read -p "Enter the location of the docker-compose.yml file: " answer
 			sleep 1
 			echo "portainer:
   container_name: portainer
@@ -153,7 +154,7 @@ fi
  
 #Install Sonarr
  
-echo "Would you like to install Sonarr? (y/n/e)"
+echo "Would you like to install Sonarr? (y/n/f/e)"
 echo " "
 read yesorno
  
@@ -183,9 +184,11 @@ elif [ "$yesorno" = e ]; then
 	echo "Goodbye!"
 	exit 1
 elif [ "$yesorno" = f ]; then
+        echo " "
         read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
 		if [ "$fix" = y ]; then
-			read -p "Enter the location of the docker-compose.yml file: " sonarranswer
+      echo " "
+      read -p "Enter the location of the docker-compose.yml file: " sonarranswer
 			read -p "Enter the new location for config: " config
 			read -p "Enter the new location of the downloads folder: " downloads
 			read -p "Enter the new location of where the TV Content is: " tv
@@ -223,7 +226,7 @@ fi
  
 #Install Radarr
  
-echo "Would you like to install Radarr? (y/n/e)"
+echo "Would you like to install Radarr? (y/n/f/e)"
  
 read yesorno
  
@@ -250,9 +253,11 @@ echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
+        echo " "
         read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
 		if [ "$fix" = y ]; then
-			read -p "Enter the location of the docker-compose.yml file: " radarranswer
+      echo " "
+    	read -p "Enter the location of the docker-compose.yml file: " radarranswer
 			read -p "Enter the new location for config: " rconfig
 			read -p "Enter the new location of where the Movie Content is: " movies
 			sleep 1
@@ -293,7 +298,7 @@ fi
  
 #Installing Jackett
  
-echo "Would you like to install Jackett (Required for Sonarr/Radarr)? (y/n/e)"
+echo "Would you like to install Jackett (Required for Sonarr/Radarr)? (y/n/f/e)"
  
 read yesorno
  
@@ -316,9 +321,11 @@ echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
-		read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+    echo " "
+    read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
 		if [ "$fix" = y ]; then
-			read -p "Enter the location of the docker-compose.yml file: " jackettanswer
+      echo " "
+      read -p "Enter the location of the docker-compose.yml file: " jackettanswer
 			read -p "Enter the new location for config: " jackett
 			sleep 1
 			echo "jackett:
@@ -356,7 +363,7 @@ fi
  
 #Install AdGuard
  
-echo "Would you like to install AdGuard (DNS Adblocker)? (y/n/e)"
+echo "Would you like to install AdGuard (DNS Adblocker)? (y/n/f/e)"
  
 read yesorno
  
@@ -386,9 +393,11 @@ echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
-		read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+    echo " "
+  	read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
 		if [ "$fix" = y ]; then
-			read -p "Enter the location of the docker-compose.yml file: " adguardanswer
+      echo " "
+      read -p "Enter the location of the docker-compose.yml file: " adguardanswer
 			sleep 1
 			echo "adguardhome:
     image: adguard/adguardhome
@@ -427,7 +436,7 @@ fi
  
 #Readarr
  
-echo "Would you like to install Readarr? (y/n/e)"
+echo "Would you like to install Readarr? (y/n/f/e)"
  
 read yesorno
  
@@ -457,9 +466,11 @@ echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
+        echo " "
         read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
 		if [ "$fix" = y ]; then
-			read -p "Enter the location of the docker-compose.yml file: " readarranswer
+     			echo " "
+     			read -p "Enter the location of the docker-compose.yml file: " readarranswer
 			read -p "Enter the new location for config: " rrconfig
 			read -p "Enter the new location of the downloads folder (Optional):  " rrdownloads
 			read -p "Enter the new location of where the Book files are(Optional): " books
@@ -472,9 +483,9 @@ elif [ "$yesorno" = f ]; then
       - PGID=${PGID}
       - TZ=US/Central
     volumes:
-      - $rrconfig
-      - $rrdownloads
-      - $books
+      - $rrconfig:/config
+      - $rrdownloads:/downloads
+      - $books:/books
     ports:
       - 8787:8787
     restart: unless-stopped" >> $readarranswer
@@ -501,7 +512,7 @@ fi
  
 #Bazarr
  
-echo "Would you like to install Bazarr (Subtitles)? (y/n/e)"
+echo "Would you like to install Bazarr (Subtitles)? (y/n/f/e)"
  
 read yesorno
  
@@ -530,11 +541,13 @@ echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
+        echo " "
         read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
 		if [ "$fix" = y ]; then
-			read -p "Enter the location of the docker-compose.yml file: " bazarranswer
+      echo " "
+      read -p "Enter the location of the docker-compose.yml file: " bazarranswer
 			read -p "Enter the new location for config: " brconfig
-			read -p "Enter the new location of the Movies Folder (Optional):  " brdownloads
+			read -p "Enter the new location of the Movies Folder (Optional):  " brmovies
 			read -p "Enter the new location of the TV Folder (Optional): " brtv
 			sleep 1
 			echo "bazarr:
@@ -545,9 +558,9 @@ elif [ "$yesorno" = f ]; then
       - PGID=${PGID}
       - TZ=US/Central
     volumes:
-      - $brconfig
-      - $brdownloads
-      - $brtv
+      - $brconfig:/config
+      - $brmovies:/movies
+      - $brtv:/tb
     ports:
       - 6767:6767
     restart: unless-stopped" >> $bazarranswer
@@ -574,7 +587,7 @@ fi
  
 #Overseerr
  
-echo "Would you like to install Overseerr? (y/n/e)"
+echo "Would you like to install Overseerr? (y/n/f/e)"
  
 read yesorno
  
@@ -598,9 +611,11 @@ echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
+        echo " "
         read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
 		if [ "$fix" = y ]; then
-			read -p "Enter the location of the docker-compose.yml file: " overanswer
+      echo " "
+    	read -p "Enter the location of the docker-compose.yml file: " overanswer
 			read -p "Enter the new location for config: " overconfig
 			sleep 1
 			echo "overseerr:
@@ -637,7 +652,7 @@ fi
  
 #Lidarr
  
-echo "Would you like to install Lidarr (Music)? (y/n/e)"
+echo "Would you like to install Lidarr (Music)? (y/n/f/e)"
  
 read yesorno
  
@@ -651,7 +666,7 @@ if [ "$yesorno" = y ]; then
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/London
+      - TZ=US/Central
     volumes:
       - /home/$USER/raspi-docker/lidarr/config:/config
       - /home/$USER/raspi-docker/downloads/music:/music #optional
@@ -664,9 +679,12 @@ echo "Successfully Added"
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
+        echo " "
         read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
 		if [ "$fix" = y ]; then
-			read -p "Enter the location of the docker-compose.yml file: " lidarranswer
+      echo " "
+      read -p "Enter the location of the docker-compose.yml file: " lidarranswer
+			echo " "
 			read -p "Enter the new location for config: " lidarrconfig
 			read -p "Enter the new location of the Music Folder (Optional):  " lrmusic
 			read -p "Enter the new location of the Downloads Folder (Optional): " lrdownloads
@@ -677,7 +695,7 @@ elif [ "$yesorno" = f ]; then
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/London
+      - TZ=US/Central
     volumes:
       - $lidarrconfig:/config
       - $lrmusic:/music #optional
@@ -708,7 +726,7 @@ fi
  
 #Heimdall
  
-echo "Would you like to install Heimdall? (y/n/e)"
+echo "Would you like to install Heimdall? (y/n/f/e)"
  
 read yesorno
  
@@ -733,9 +751,11 @@ echo " "
 elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
+        echo " "
         read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
 		if [ "$fix" = y ]; then
-			read -p "Enter the location of the docker-compose.yml file: " heimdallanswer
+      echo " "
+      read -p "Enter the location of the docker-compose.yml file: " heimdallanswer
 			read -p "Enter the new location for config: " heimdallconfig
 			sleep 1
 			echo "heimdall:
