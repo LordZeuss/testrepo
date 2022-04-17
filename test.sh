@@ -36,7 +36,7 @@ echo " "
  
 #Update the system
 echo " "
-echo "Would you like to update your system (Recommended)? (y/n/f/e)"
+echo "Would you like to update your system (Recommended)? (y/n/e)"
 echo " "
 echo "y=yes | n=no | f=Change-container-volumes-&-location | e=exit-program"
 echo " "
@@ -63,7 +63,7 @@ fi
  
 #Test if Docker is working and installed
  
-echo "Would you like to check if Docker is working(Recommended)? (y/n/f/e)"
+echo "Would you like to check if Docker is working(Recommended)? (y/n/e)"
  
 read -n1 yesorno
 echo " "
