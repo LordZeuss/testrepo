@@ -1,4 +1,4 @@
-US/Central#!/bin/bash 
+#!/bin/bash 
  
 clear
  
@@ -11,11 +11,7 @@ ___  ____ _  _ ____    _ _  _ ____ ___ ____ _    _    ____ ____
 "
  
 #This is a script to help install essentials for docker. 
- 
-#This script will install portainer, sonarr, radarr, and jackett.
-
- 
- 
+  
  
 ######################################################################
  
@@ -28,9 +24,9 @@ updatesys () { yes | sudo apt-get update && sudo apt-get upgrade; }
  
 echo "This script assumes you have your docker files located in your /home/$USER/raspi-docker folder."
 echo " "
-echo "If your folder is located elsewhere, you will need to change the location of your docker-compose files in this script."
+echo "If your folder is located elsewhere, you will need to change the location of your docker-compose files in this script, or clicking f when selecting containers."
 echo " "
-echo "This script follows my other guide of insatlling Docker and Mullvad VPN. Visit https://github.com/LordZeuss/raspi-docker for more info."
+echo "This script follows my other guide of installing Docker and Mullvad VPN. Visit https://github.com/LordZeuss/raspi-docker for more info."
 echo " "
 ######################################################################
  
@@ -114,7 +110,7 @@ elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
         echo " "
-		read -n1 -p "You have selected to change the location of the docker-compose.yml file. Would you like to coninue? (y/n) " fix
+		read -n1 -p "You have selected to change the location/volumes of this container. Would you like to continue? (y/n) " fix
 		echo " "
 		if [ "$fix" = y ]; then
       echo " "
@@ -186,7 +182,7 @@ elif [ "$yesorno" = e ]; then
 	exit 1
 elif [ "$yesorno" = f ]; then
         echo " "
-        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+        read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
 		if [ "$fix" = y ]; then
       echo " "
       read -p "Enter the location of the docker-compose.yml file: " sonarranswer
@@ -211,7 +207,7 @@ elif [ "$yesorno" = f ]; then
   			echo " " >> $sonarranswer
   			
 		elif [ "$fix" = n ]; then
-			echo "Not adding Portainer to any file."
+			echo "Not adding Sonarr to any file."
 			source arr-installer.sh
 			return
 		else
@@ -236,7 +232,7 @@ if [ "$yesorno" = y ]; then
 	mkdir /home/$USER/raspi-docker/downloads/movies
 	mkdir /home/$USER/raspi-docker/radarr/config
 	echo "radarr:
-    image: linuxserver/radarr:5.14
+    image: lscr.io/linuxserver/radarr
     container_name: radarr
     environment:
       - PUID=0
@@ -245,7 +241,7 @@ if [ "$yesorno" = y ]; then
       - UMASK=022 #optional
     volumes:
       - ./home/$USER/raspi-docker/radarr/config:/config
-      - ./home/$USER/raspi-docker/downloads/movies
+      - ./home/$USER/raspi-docker/downloads/movies:/movies
     ports:
       - 7878:7878
     restart: unless-stopped" >> /home/$USER/raspi-docker/docker-compose.yml 		#replace /home/$USER/raspi-docker/docker-compose.yml with the location of your docker-compose.yml file
@@ -255,7 +251,7 @@ elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
         echo " "
-        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+        read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
 		if [ "$fix" = y ]; then
       echo " "
     	read -p "Enter the location of the docker-compose.yml file: " radarranswer
@@ -263,7 +259,7 @@ elif [ "$yesorno" = f ]; then
 			read -p "Enter the new location of where the Movie Content is: " movies
 			sleep 1
 			echo "radarr:
-    image: linuxserver/radarr:5.14
+    image: lscr.io/linuxserver/radarr
     container_name: radarr
     environment:
       - PUID=0
@@ -280,7 +276,7 @@ elif [ "$yesorno" = f ]; then
   			echo "Done."
 			echo " "
 		elif [ "$fix" = n ]; then
-			echo "Not adding Portainer to any file."
+			echo "Not adding Radarr to any file."
 			source arr-installer.sh
 			return
 		else
@@ -294,7 +290,72 @@ else
 	echo "Not a valid answer. Exiting..."
 	exit 1
 fi
- 
+
+######################################################
+
+#Prowlarr
+
+echo "Would you like install Prowlarr? (y/n/f/e)"
+
+read -n1 yesorno
+
+if [ "$yesorno" = y ]; then
+	mkdir /home/$USER/raspi-docker/prowlarr
+	mkdir /home/$USER/raspi-docker/prowlarr/config
+	echo "prowlarr:
+    image: lscr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=US/Central
+    volumes:
+      - /path/to/data:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped" >> /home/$USER/raspi-docker/docker-compose.yml 	#replace /home/$USER/raspi-docker/docker-compose.yml with the location of your docker-compose.yml file
+	echo " " >> /home/$USER/raspi-docker/docker-compose.yml		#replace /home/$USER/raspi-docker/docker-compose.yml with the location of your docker-compose.yml file
+	echo "Successfully Added"
+elif [ "$yesorno" = n ]; then
+	echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+        echo " "
+        read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
+    if [ "$fix" = y ]; then
+      echo " "
+      read -p "Enter the location of the docker-compose.yml file: " prowlarranswer
+      read -p "Enter the new location for config: " prowlarrconfig
+      sleep 1
+      echo "prowlarr:
+        image: lscr.io/linuxserver/prowlarr:develop
+        container_name: prowlarr
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=US/Central
+        volumes:
+          - $prowlarrconfig:/config
+        ports:
+          - 9696:9696
+        restart: unless-stopped" >> $prowlarranswer
+        echo " " >> $prowlarranswer
+        echo "Done."
+      echo " "
+    elif [ "$fix" = n ]; then
+      echo "Not adding Prowlarr to any file."
+      source arr-installer
+      return
+    else
+      echo "Goodbye!"
+      exit 1
+    fi
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
+	exit 1
+else
+	echo "Not a valid answer. Exiting..."
+	exit 1
+fi
 ######################################################################
  
 #Installing Jackett
@@ -323,7 +384,7 @@ elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
     echo " "
-    read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+    read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
 		if [ "$fix" = y ]; then
       echo " "
       read -p "Enter the location of the docker-compose.yml file: " jackettanswer
@@ -345,7 +406,7 @@ elif [ "$yesorno" = f ]; then
   			echo "Done."
 			echo " "
 		elif [ "$fix" = n ]; then
-			echo "Not adding Portainer to any file."
+			echo "Not adding Jackett to any file."
 			source arr-installer.sh
 			return
 		else
@@ -359,9 +420,145 @@ else
 	echo "Not a valid answer. Exiting..."
 	exit 1
 fi
- 
+
+#############################################################
+
+echo "Would you like install Jellyfin Media Server? (y/n/f/e)"
+
+read -n1 yesorno
+
+if [ "$yesorno" = y ]; then
+	mkdir /home/$USER/raspi-docker/jellyfin
+	mkdir /home/$USER/raspi-docker/jellyfin/config
+	echo "jellyfin:
+    image: lscr.io/linuxserver/jellyfin
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=US/Central
+      - JELLYFIN_PublishedServerUrl=192.168.0.5 #optional
+    volumes:
+      - /home/$USER/raspi-docker/config:/config
+      - /home/$USER/raspi-docker/downloads/tv:/data/tvshows
+      - /home/$USER/raspi-docker/downloads/movies:/data/movies
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    restart: unless-stopped" >> /home/$USER/raspi-docker/docker-compose.yml 	#replace /home/$USER/raspi-docker/docker-compose.yml with the location of your docker-compose.yml file
+	echo " " >> /home/$USER/raspi-docker/docker-compose.yml		#replace /home/$USER/raspi-docker/docker-compose.yml with the location of your docker-compose.yml file
+	echo "Successfully Added"
+elif [ "$yesorno" = n ]; then
+	echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+        echo " "
+        read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
+    if [ "$fix" = y ]; then
+      echo " "
+      read -p "Enter the location of the docker-compose.yml file: " jellyanswer
+      read -p "Enter the new location for config: " jellyconfig
+      read -p "Enter the new location for TV Shows: " jellytv
+      read -p "Enter the new location for Movies: " jellymovies
+      read -p "Enter the IP of the Server URL (Default is 192.168.0.5): " jellyip
+      sleep 1
+      echo "jellyfin:
+        image: lscr.io/linuxserver/jellyfin
+        container_name: jellyfin
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=US/Central
+          - JELLYFIN_PublishedServerUrl=$jellyip #optional
+        volumes:
+          - $jellyconfig:/config
+          - $jellytv:/data/tvshows
+          - $jellymovies:/data/movies
+        ports:
+          - 8096:8096
+          - 8920:8920 #optional
+          - 7359:7359/udp #optional
+          - 1900:1900/udp #optional
+        restart: unless-stopped" >> $jellyanswer
+        echo " " >> $jellyanswer
+        echo "Done."
+      echo " "
+    elif [ "$fix" = n ]; then
+      echo "Not adding Jellyfin Media Server to any file."
+      source arr-installer.sh
+      return
+    else
+      echo "Goodbye!"
+      exit 1
+    fi
+elif [ "$yesorno" = e ]; then
+	echo "Goodbye!"
+	exit 1
+else
+	echo "Not a valid answer. Exiting..."
+	exit 1
+fi
 #############################################################################################
+
+#Plex
  
+echo "Would you like to install Plex Media Server? (y/n/f/e)"
+ 
+read -n1 yesorno
+ 
+if [ "$yesorno" = y ]; then
+ mkdir /home/$USER/raspi-docker/plex
+ mkdir /home/$USER/raspi-docker/plex/config
+ read -p "Enter your Plex Claim Token: " plextoken
+  sudo docker run \
+-d \
+--name plex \
+--network=host \
+-e TZ="America/Chicago" \
+-e PLEX_CLAIM="$plextoken" \
+-v /home/$USER/raspi-docker/plex/config:/config \
+-v /home/$USER/raspi-docker/downloads/movies:/movies \
+-v /home/$USER/raspi-docker/downloads/tv:/tv \
+plexinc/pms-docker:plexpass
+elif [ "$yesorno" = n ]; then
+ echo "Skipping..."
+elif [ "$yesorno" = f ]; then
+        echo " "
+        read -n1 -p "You have selected to use a custom Plex Server Setup. Would you like to continue? (y/n) " fix
+   if [ "$fix" = y ]; then
+    read -p "Enter your Plex Claim Token: " plextoken2
+    read -p "Enter your config location: " plexconfig
+    read -P "Enter the location of your Movies: " plexmovies
+    read -p "Enter the location of your TV Shows: " plextv
+    sudo docker run \
+  -d \
+  --name plex \
+  --network=host \
+  -e TZ="America/Chicago" \
+  -e PLEX_CLAIM="$plextoken2" \
+  -v $plexconfig:/config \
+  -v $plexmovies:/movies \
+  -v $plextv:/tv \
+  plexinc/pms-docker:plexpass
+   elif [ "$fix" = n ]; then
+     echo "Not adding Plex."
+     source arr-installer.sh
+     return
+   else
+     echo "Goodbye!"
+     exit 1
+   fi
+elif [ "$yesorno" = e ]; then
+ echo "Goodbye!"
+ exit 1
+else
+ echo "Not a valid answer. Exiting..."
+ exit 1
+fi
+
+##############################################################
+
 #Install AdGuard
  
 echo "Would you like to install AdGuard (DNS Adblocker)? (y/n/f/e)"
@@ -395,7 +592,7 @@ elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
     echo " "
-  	read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+  	read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
 		if [ "$fix" = y ]; then
       echo " "
       read -p "Enter the location of the docker-compose.yml file: " adguardanswer
@@ -419,7 +616,7 @@ elif [ "$yesorno" = f ]; then
   			echo "Done."
 			echo " "
 		elif [ "$fix" = n ]; then
-			echo "Not adding Portainer to any file."
+			echo "Not adding Adguard Home to any file."
 			source arr-installer.sh
 			return
 		else
@@ -468,7 +665,7 @@ elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
         echo " "
-        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+        read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
 		if [ "$fix" = y ]; then
      			echo " "
      			read -p "Enter the location of the docker-compose.yml file: " readarranswer
@@ -494,7 +691,7 @@ elif [ "$yesorno" = f ]; then
   			echo "Done."
 			echo " "
 		elif [ "$fix" = n ]; then
-			echo "Not adding Portainer to any file."
+			echo "Not adding Readarr to any file."
 			source arr-installer.sh
 			return
 		else
@@ -543,7 +740,7 @@ elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
         echo " "
-        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+        read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
 		if [ "$fix" = y ]; then
       echo " "
       read -p "Enter the location of the docker-compose.yml file: " bazarranswer
@@ -569,7 +766,7 @@ elif [ "$yesorno" = f ]; then
   			echo "Done."
 			echo " "
 		elif [ "$fix" = n ]; then
-			echo "Not adding Portainer to any file."
+			echo "Not adding Bazarr to any file."
 			source arr-installer.sh
 			return
 		else
@@ -613,7 +810,7 @@ elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
         echo " "
-        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+        read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
 		if [ "$fix" = y ]; then
       echo " "
     	read -p "Enter the location of the docker-compose.yml file: " overanswer
@@ -634,7 +831,7 @@ elif [ "$yesorno" = f ]; then
   			echo "Done."
 			echo " "
 		elif [ "$fix" = n ]; then
-			echo "Not adding Portainer to any file."
+			echo "Not adding Overseerr to any file."
 			source arr-installer.sh
 			return
 		else
@@ -681,7 +878,7 @@ elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
         echo " "
-        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+        read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
 		if [ "$fix" = y ]; then
       echo " "
       read -p "Enter the location of the docker-compose.yml file: " lidarranswer
@@ -708,7 +905,7 @@ elif [ "$yesorno" = f ]; then
   			echo "Done."
 			echo " "
 		elif [ "$fix" = n ]; then
-			echo "Not adding Portainer to any file."
+			echo "Not adding Lidarr to any file."
 			source arr-installer.sh
 			return
 		else
@@ -753,7 +950,7 @@ elif [ "$yesorno" = n ]; then
 	echo "Skipping..."
 elif [ "$yesorno" = f ]; then
         echo " "
-        read -n1 -p "You have selected to change the volumes of the container. Would you like to coninue? (y/n) " fix
+        read -n1 -p "You have selected to change the location/volumes of the container. Would you like to continue? (y/n) " fix
 		if [ "$fix" = y ]; then
       echo " "
       read -p "Enter the location of the docker-compose.yml file: " heimdallanswer
@@ -776,7 +973,7 @@ elif [ "$yesorno" = f ]; then
   			echo "Done."
 			echo " "
 		elif [ "$fix" = n ]; then
-			echo "Not adding Portainer to any file."
+			echo "Not adding Heimdall to any file."
 			source arr-installer.sh
 			return
 		else
